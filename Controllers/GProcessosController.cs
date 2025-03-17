@@ -43,6 +43,50 @@ namespace PKX.Controllers
             return View();
         }
 
+        public async Task<IActionResult> FiltrarProcessosId(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+
+            var linhasProcessos = await _context.LinhasProcessos
+                                                .Where(x => x.ProcessoId == id)
+                                                .ToListAsync();
+
+            return View(linhasProcessos);
+        }
+        
+        public async Task <IActionResult> FiltrarPorClienteId(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+            
+            var linhasProcesso = await _context.Processos
+                                            .Where(p => p.ClienteId == id)
+                                            .ToListAsync();
+            return View(linhasProcesso); 
+        }
+        
+        public async Task <IActionResult> FiltrarPorPrioridadeId(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+            
+            var linhasProcesso = await _context.Processos
+                                            .Where(p => p.TipoPrioridadeId == id)
+                                            .ToListAsync();
+            return View(linhasProcesso);
+        }
+        
+        public async Task <IActionResult> FiltrarPorCategoriaId(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+            
+            var linhasProcesso = await _context.Processos
+                                            .Where(p => p.CategoriaId == id)
+                                            .ToListAsync();
+            return View(linhasProcesso);
+        }
 
         // Metodo que carrega os processos FILTRADOS para a view index, caso contrario haveriam processos na respetiva DropDownList da view index
         [HttpPost]
@@ -52,7 +96,7 @@ namespace PKX.Controllers
             
             // carrega os processos para a lista processos filtrado pelo cliente
             List<Processo> processos = _context.Processos
-                                        .Where(p =>  cliente > 0 && cliente != null ?  p.ClienteId == cliente : 1==1 )
+                                        .Where(p =>  cliente > 0 ?  p.ClienteId == cliente : 1==1 )
                                         .ToList();
 
             // recupero o valor do FiltroProcesso que estava selecionado de modo a passar como selecionado na DropDownList
