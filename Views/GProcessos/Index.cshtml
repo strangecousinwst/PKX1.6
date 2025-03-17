@@ -1,63 +1,130 @@
 ﻿@model IEnumerable<PKX.Models.LinhaProcesso>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Gestor Processos";
 }
+@{
+    bool filtrosAtivos = !string.IsNullOrEmpty(Context.Session.GetString("FiltrosAtivos")) 
+                         && 
+                         bool.Parse(Context.Session.GetString("FiltrosAtivos"));
+    
+    int FiltroProcesso = Context.Session.GetInt32("FiltroProcesso") ?? 0;
+}
+
+
 <form method="post"> 
+
+    
+    <h3>Processos</h3> 
+
+
+    @*ZONA DE APRESENTAÇÂO DOS FILTROS DE PROCESSO*@
+    
+
+    @* Verificamos se o utilizador ativou os filtros de processos*@
+    @if (filtrosAtivos == true)
+    {
+        @*Começamos por dar a opção de remover os filtros *@
+		<a asp-controller="GProcessos" asp-action="RemoverFiltros">Esconder Filtros </a> <strong> | </strong>
+        <a asp-controller="GProcessos" asp-action="LimparFiltros">Limpar Filtros </a>
+        @*Apresentamos a listagem dos clientes pela qual é possivel filtrar*@
+        <p>@Html.DropDownList("cliente", (SelectList)ViewBag.cliente, "--Clientes--",
+                     new { @onchange = "this.form.action='/GProcessos/AlterarFiltroCliente'; this.form.submit();" })
+        </p>
+    }
+    else
+    {
+        <a asp-controller="GProcessos" asp-action="ExibirFiltros">Exibir Filtros</a>
+    }
+
+
+
+
+    @*ZONA DE APRESENTAÇÂO E ESCOLHA DO PROCESSO A VIZUALIZAR*@
+    
+
     <p>
-        <input type="submit" value="Filtre" formaction="/GProcessos/MostrarLinhas" />
-        @Html.DropDownList("processo",(SelectList)ViewBag.PROCESSOS,"--Selecione--")
+        @* texto para apresentar a quantidade de processos disponiveis na ComboBox *@
+        Existem @ViewBag.QUANTIDADEPROCESSOS processos:
+        @* apresentação da ComboBox carregada com os processos filtrados *@
+        @Html.DropDownList("processo", (SelectList)ViewBag.processos, "--Selecione o processo--",
+                 new { @onchange = "this.form.action='/GProcessos/MostrarLinhas'; this.form.submit();" })
     </p>
 
-    <h1>Linhas Processos</h1>
 
-    <p>
-        <a asp-action="Create">Criar nova Linha</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Data
-                </th>
-                <th>
-                    Texto
-                </th>
-                <th>
-                    ProcessoId
-                </th>
-                <th>
-                    FuncionarioId
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    @if (ViewBag.LINHAPROCESSOS != null)
-            {
+
+
+    @*ZONA DE APRESENTAÇÂO DAS LINHAS DE PROCESSOS*@
+
+
+
+    @* Vamos consultar o ViewBag para saber se tem linhas de processo a apresentar*@
+    @* Consultamos tambem a variavel de sessão para saber se tem um processo *@
+    @if (ViewBag.LINHAPROCESSOS != null && FiltroProcesso>0)
+    {
+        @* Titulo apresentado na tela*@
+        <h4>Linhas do Processo</h4>
+
+		@* Botão para criar nova linha de processo*@
+        <p>
+            <a asp-action="Create">Criar nova Linha</a>
+        </p>
+
+		@* Tabela que apresenta as linhas de processo*@
+
+        <table class="table">
+
+			@* Cabeçalho da tabela*@
+            <thead>
+                <tr>
+                    <th>
+                        Data
+                    </th>
+                    <th>
+                        Texto
+                    </th>
+                    <th>
+                        ProcessoId
+                    </th>
+                    <th>
+                        FuncionarioId
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+			@* Corpo da tabela*@
+            <tbody>
+                @*  Vamos consultar linha a linha *@
                 @foreach (var item in ViewBag.LINHAPROCESSOS)
                 {
                     <tr>
                         <td>
-                            @item.Data
+                            @item.Data @* Atributo com o valor do campo data*@
                         </td>
                         <td>
-                            @item.Texto
+							@item.Texto @* Atributo com o valor do campo texto*@
                         </td>
                         <td>
-                            @item.ProcessoId
+							@item.Titulo @* Atributo com o valor do campo ProcessoId*@
                         </td>
                         <td>
-                            @item.FuncionarioId
+							@item.FuncionarioId @* Atributo com o valor do campo FuncionarioId*@
                         </td>
+
+						@* Coluna com as ações possíveis sobre a linha de processo*@
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Apagar</a>
                         </td>
                     </tr>
                 }
-            }
-        </tbody>
-    </table>
+
+            </tbody>
+        </table>
+    }
+    @* No caso de não ter linhas de processo para exibir, será enão exibida uma mensagem informativa*@
+    else 
+    {
+        <h5 style="color:   darkgray;"> <i> Seleciona na Combobox e pressione o botão consultar para que sejam apresentadas as linhas desse processo </i> </h5>
+    }
 </form>
