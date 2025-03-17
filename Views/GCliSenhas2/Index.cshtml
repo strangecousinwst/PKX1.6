@@ -1,0 +1,22 @@
+﻿<form>
+    @Html.DropDownList("id", (SelectList)ViewBag.CLIENTES, "Selecione um Cliente", @htmlAttributes: new { @onchange = "this.form.submit();" })
+    <br />
+
+    <table class="table">
+        <th>Tipo</th>
+        <th>Item 1</th>
+        <th>Item 2</th>
+        <th>Texto complementar</th>
+        @foreach (Item i in ViewBag.LISTADO)
+        {
+            <tr>
+                <td>@i.TipoVirtual.Designacao</td>
+                <td>@i.Item1</td>
+                <td>@i.Item2</td>
+                <td>@i.Texto</td>
+                <td><a asp-action="Eliminar" asp-route-idItem=@i.Id>Eliminar</a></td>
+                <td><a asp-action="Editar" asp-route-idItem=@i.Id>Editar</a></td>
+            </tr>
+        }
+    </table>
+</form>

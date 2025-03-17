@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<form>
+    <table class="table">
+        <tr>
+            <td>
+                <a asp-action="Create">Create New</a>
+            </td>
+            <td>
+                @Html.DropDownList("AtividadeId", (SelectList)ViewBag.Atividades, "Atividade", new { onchange = "this.form.submit();" })
+            </td>
+            <td>
+                @Html.DropDownList("FuncionarioId", (SelectList)ViewBag.Funcionarios, "Funcionario", new { onchange = "this.form.submit();" })
+            </td>
+            <td>
+                @Html.DropDownList("ClienteId", (SelectList)ViewBag.Clientes, "Cliente", new { onchange = "this.form.submit();" })
+            </td>
+        </tr>
+    </table>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index"
+                    asp-route-AtividadeId="@(ViewBag.AtividadeId ?? 0)"
+                    asp-route-FuncionarioId="@(ViewBag.FuncionarioId ?? 0)"
+                    asp-route-ClienteId="@(ViewBag.ClienteId ?? 0)"
+                    asp-route-SortedBy="Data"
+                    asp-route-isAsc="@(ViewBag.SortedBy == "Data" ? !ViewBag.isAsc : true)">
+                    Data
+                    @if (ViewBag.SortedBy == "Data")
+                    {
+                        @if (ViewBag.isAsc)
+                        {
+                            <span>🔼</span> @* Show ascending indicator *@
+                        }
+                        else
+                        {
+                            <span>🔽</span> @* Show descending indicator *@
+                        }
+                    }
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                    asp-route-SortedBy="Descritivo"
+                    asp-route-isAsc="@(ViewBag.SortedBy == "Descritivo" ? !ViewBag.isAsc : true)">
+                    Descritivo
+                        @if (ViewBag.SortedBy == "Descritivo")
+                    {
+                        @if (ViewBag.isAsc)
+                        {
+                            <span>🔼</span> @* Show ascending indicator *@
+                        }
+                        else
+                        {
+                            <span>🔽</span> @* Show descending indicator *@
+                        }
+                    }
+                </a>
+            </th>
+            <th>
+                Minutos
+            </th>
+            <th>
+                Atividade
+            </th>
+            <th>
+                Funcionario
+            </th>
+            <th>
+                Cliente
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in ViewBag.listaTempo)
+        {
+            <tr>
+                <td>
+                    @item.Data
+                </td>
+                <td>
+                    @item.Descritivo
+                </td>
+                <td>
+                    @item.Minutos
+                </td>
+                <td>
+                    @item.Atividade
+                </td>
+                <td>
+                    @item.Funcionario
+                </td>
+                <td>
+                    @item.Cliente
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

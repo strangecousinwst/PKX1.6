@@ -1,0 +1,50 @@
+﻿@model PKX.Models.Movimento
+
+@{
+    ViewData["Title"] = "Editar Movimento";
+}
+
+<h2>Editar Movimento</h2>
+
+<form asp-action="Edit">
+    <div class="form-group">
+        <label asp-for="Data" class="control-label"></label>
+        <input asp-for="Data" class="form-control" />
+        <span asp-validation-for="Data" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Descritivo" class="control-label"></label>
+        <input asp-for="Descritivo" class="form-control" />
+        <span asp-validation-for="Descritivo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Valor" class="control-label"></label>
+        <input asp-for="Valor" class="form-control" />
+        <span asp-validation-for="Valor" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TipoId" class="control-label"></label>
+        <input asp-for="TipoId" class="form-control" />
+        <span asp-validation-for="TipoId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ClienteId" class="control-label"></label>
+        <input asp-for="ClienteId" class="form-control" />
+        <span asp-validation-for="ClienteId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Marcador" class="control-label"></label>
+        <input asp-for="Marcador" class="form-control" />
+        <span asp-validation-for="Marcador" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Guardar" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

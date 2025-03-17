@@ -1,0 +1,96 @@
+﻿@model IEnumerable<PKX.Models.Cadastro>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<h1 class="mb-5">Cadastros</h1>
+
+
+<form method="get" asp-action="Index">
+    <div class="row align-items-end">
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label>Filtrar Cliente:</label>
+                <input type="text" id="clienteNome" name="clienteNome" class="form-control" placeholder="Digite o nome do cliente e carregue ENTER">
+            </div>
+            <div class="form-group">
+                <label for="clienteId">Cliente:</label>
+                <select id="clienteId" name="clienteId" class="form-control">
+                    <option value="">Selecione um Cliente</option>
+
+                    @foreach (var cliente in ViewBag.Clientes)
+                    {
+                        <option value="@cliente.Value">@cliente.Text</option>                 
+                    }
+
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+
+                <label for="dataInicial">Data de Início:</label>
+                <input type="date" id="dataInicial" name="dataInicial" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="dataFinal">Data de Fim:</label>
+                <input type="date" id="dataFinal" name="dataFinal" class="form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+<p class="d-flex justify-content-end fw-bold">
+    <a asp-action="Index"><button class="btn btn-primary">OK</button></a>
+</p>
+<p class="fw-bold">
+    <a asp-action="Create">Criar Novo Registo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-data=@ViewBag.ORDENARDATA>
+                    @Html.DisplayNameFor(model => model.Data)
+                    <i class="fa @(ViewBag.ORDENARDATA == "asc" ? "fa-arrow-up" : "fa-arrow-down")"></i>
+                </a>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Texto)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.ClienteId)
+            </th>
+
+            @* <th>
+                @Html.DisplayNameFor(model => model.Cliente.NomeCliente)
+            </th> *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Data)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Texto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClienteId)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.Cliente.NomeCliente)
+            </td> *@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

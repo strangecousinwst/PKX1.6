@@ -1,0 +1,72 @@
+﻿@model IEnumerable<PKX.Models.Movimento>
+
+@{
+    ViewData["Title"] = "Clientes";
+    var clientes = ViewBag.Clientes as List<Cliente> ?? new List<Cliente>();
+    var movimentos = Model ?? new List<PKX.Models.Movimento>();
+}
+
+<h3>Filtrar Clientes</h3>
+<form method="get" asp-controller="GMovimentos" asp-action="Index">
+    <input type="text" name="searchText" placeholder="Filtrar clientes..." />
+    <button type="submit">Filtrar</button>
+</form>
+<p> </p>
+
+<h3>Clientes</h3>
+<form method="get" asp-controller="GMovimentos" asp-action="Index">
+    <select name="clienteId" id="clienteSelect" onchange="this.form.submit()">
+        <option value="">Selecione um cliente</option>
+        @foreach (var cliente in clientes)
+        {
+            <option value="@cliente.Id">@cliente.NomeCliente</option>
+        }
+    </select>
+</form>
+<p> </p>
+
+<form method="get" asp-controller="GMovimentos" asp-action="Index">
+    <button type="submit" name="showAll" value="true">Mostrar Todos</button>
+</form>
+<p> </p>
+
+<h3>Movimentos do Cliente</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Descritivo</th>
+            <th>Valor</th>
+            <th>Tipo</th>
+            <th>Cliente</th>
+            <th>Marcador</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (movimentos.Any())
+        {
+            @foreach (var movimento in movimentos)
+            {
+                <tr>
+                    <td>@movimento.Data.ToString("dd/MM/yyyy")</td>
+                    <td>@movimento.Descritivo</td>
+                    <td>@movimento.Valor</td>
+                    <td>@movimento.TipoId</td>
+                    <td>@movimento.ClienteId</td>
+                    <td>@movimento.Marcador</td>
+                    <td>
+                        <a asp-controller="GMovimentos" asp-action="Edit" asp-route-id="@movimento.Id">Editar</a>
+                        <a asp-controller="GMovimentos" asp-action="Delete" asp-route-id="@movimento.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">Nenhum movimento encontrado.</td>
+            </tr>
+        }
+    </tbody>
+</table>

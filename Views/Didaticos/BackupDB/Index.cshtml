@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm())
+{
+    <br />
+    <h8>BACKUP DA BASE DE DADOS </h8>
+    <br /><br />
+    <label>Digitar o seu nome PARA JUNTAR ao nome do ficheiro da base de dados</label>
+    @Html.TextBox("nomebackup")
+    <br /><br />
+    <input type="submit" value="Executar backup agora" />
+}
+<br />
+@{
+    string s = ViewBag.nome;
+    if (string.IsNullOrEmpty(s))
+    {
+        <label>Backup não executado.</label>
+    }
+    else
+    {
+        <label>
+            BACKUP EXECUTADO. <br /><br />Pasta de destino: @ViewBag.pasta <br /><br />
+            Nome do ficheiro: @ViewBag.nome
+        </label>
+    }
+}

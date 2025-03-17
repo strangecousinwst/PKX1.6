@@ -1,0 +1,63 @@
+﻿@model IEnumerable<PKX.Models.LinhaProcesso>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<form method="post"> 
+    <p>
+        <input type="submit" value="Filtre" formaction="/GProcessos/MostrarLinhas" />
+        @Html.DropDownList("processo",(SelectList)ViewBag.PROCESSOS,"--Selecione--")
+    </p>
+
+    <h1>Linhas Processos</h1>
+
+    <p>
+        <a asp-action="Create">Criar nova Linha</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Texto
+                </th>
+                <th>
+                    ProcessoId
+                </th>
+                <th>
+                    FuncionarioId
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @if (ViewBag.LINHAPROCESSOS != null)
+            {
+                @foreach (var item in ViewBag.LINHAPROCESSOS)
+                {
+                    <tr>
+                        <td>
+                            @item.Data
+                        </td>
+                        <td>
+                            @item.Texto
+                        </td>
+                        <td>
+                            @item.ProcessoId
+                        </td>
+                        <td>
+                            @item.FuncionarioId
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</form>
