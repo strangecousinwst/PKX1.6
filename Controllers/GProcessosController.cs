@@ -43,6 +43,50 @@ namespace PKX.Controllers
             return View();
         }
 
+        public async Task<IActionResult> FiltrarProcessosId(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+
+            var linhasProcessos = await _context.LinhasProcessos
+                                                .Where(x => x.ProcessoId == id)
+                                                .ToListAsync();
+
+            return View(linhasProcessos);
+        }
+        
+        public async Task <IActionResult> FiltrarPorClienteId(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+            
+            var linhasProcesso = await _context.Processos
+                                            .Where(p => p.ClienteId == id)
+                                            .ToListAsync();
+            return View(linhasProcesso); 
+        }
+        
+        public async Task <IActionResult> FiltrarPorPrioridadeId(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+            
+            var linhasProcesso = await _context.Processos
+                                            .Where(p => p.TipoPrioridadeId == id)
+                                            .ToListAsync();
+            return View(linhasProcesso);
+        }
+        
+        public async Task <IActionResult> FiltrarPorCategoriaId(int? id) {
+            if (id == null) {
+                return NotFound();
+            }
+            
+            var linhasProcesso = await _context.Processos
+                                            .Where(p => p.CategoriaId == id)
+                                            .ToListAsync();
+            return View(linhasProcesso);
+        }
 
         // Metodo que carrega os processos FILTRADOS para a view index, caso contrario haveriam processos na respetiva DropDownList da view index
         [HttpPost]
