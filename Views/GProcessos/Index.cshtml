@@ -14,7 +14,7 @@
 <form method="post"> 
 
     
-    <h3>Processos</h3> 
+    <h3>Processos</h3>
 
 
     @*ZONA DE APRESENTAÇÂO DOS FILTROS DE PROCESSO*@
@@ -66,7 +66,7 @@
 
 		@* Botão para criar nova linha de processo*@
         <p>
-            <a asp-action="Create">Criar nova Linha</a>
+            <a asp-action="Create">Novo</a>
         </p>
 
 		@* Tabela que apresenta as linhas de processo*@
@@ -114,7 +114,7 @@
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
                             <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Apagar</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
                         </td>
                     </tr>
                 }
@@ -125,6 +125,6 @@
     @* No caso de não ter linhas de processo para exibir, será enão exibida uma mensagem informativa*@
     else 
     {
-        <h5 style="color:   darkgray;"> <i> Seleciona na Combobox e pressione o botão consultar para que sejam apresentadas as linhas desse processo </i> </h5>
+        <h5 style="color:   darkgray;"> <i> Seleciona o processo na Combobox para que sejam apresentadas as linhas desse processo </i> </h5>
     }
 </form>

@@ -52,7 +52,7 @@ namespace PKX.Controllers
             
             // carrega os processos para a lista processos filtrado pelo cliente
             List<Processo> processos = _context.Processos
-                                        .Where(p =>  cliente > 0 && cliente != null ?  p.ClienteId == cliente : 1==1 )
+                                        .Where(p =>  cliente > 0 ?  p.ClienteId == cliente : 1==1 )
                                         .ToList();
 
             // recupero o valor do FiltroProcesso que estava selecionado de modo a passar como selecionado na DropDownList
