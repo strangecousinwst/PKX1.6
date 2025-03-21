@@ -10,8 +10,31 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-<!-- please give me a dropdown list in html here-->
+@using (Html.BeginForm("Index", "GJoaoLinhaProcessos", FormMethod.Get))
+{
+<div>
+    Categorias:
+    @Html.DropDownList("categoria", (SelectList)ViewBag.CATEGORIAS)
+</div>
 
+<div>
+    Estados:
+    @Html.DropDownList("estado", (SelectList)ViewBag.ESTADOS)
+</div>
+
+<div>
+    Processos:
+    @Html.DropDownList("processo", (SelectList)ViewBag.PROCESSOS)
+</div>
+
+<div>
+    Prioridades:
+    @Html.DropDownList("prioridade", (SelectList)ViewBag.PRIORIDADES)
+</div>
+
+<input type="submit" value="Filtrar" class="btn btn-primary" />
+
+}
 
 
 <table class="table">

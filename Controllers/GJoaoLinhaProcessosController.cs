@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -33,24 +34,8 @@ namespace PKX.Controllers
                 return NotFound();
             }
 
-            return View(linhasProcessos);
-        }
-
-        // metodo que devolve processos com determinado ID de cliente
-        public async Task<IActionResult> FiltrarPorClienteId(int? id) {
-            if (id == null) {
-                return NotFound();
-            }
-
-            var listaProcessos = await _context.Processos
-                                         .Where(p => p.ClienteId == id)
-                                         .ToListAsync();            
-
-            if (listaProcessos == null) {
-                return NotFound();
-            }
-
-            return View(listaProcessos);
+            ViewBag.PROCESSOSFILTRADOS = new SelectList(linhasProcessos);
+            return View();
         }
 
         // metodo que devolve processos com determinado ID de prioridade
@@ -67,7 +52,8 @@ namespace PKX.Controllers
                 return NotFound();
             }
 
-            return View(listaProcessos);
+            ViewBag.PRIORIDADESFILTRADAS = new SelectList(listaProcessos);
+            return View();
         }
 
         // metodo que devolve processos com determinado ID de categoria
@@ -84,7 +70,8 @@ namespace PKX.Controllers
                 return NotFound();
             }
 
-            return View(listaProcessos);
+            ViewBag.CATEGORIASFILTRADAS = new SelectList(listaProcessos);
+            return View();
         }
 
         // metodo que devolve processos com determinado ID de estado
@@ -101,7 +88,8 @@ namespace PKX.Controllers
                 return NotFound();
             }
 
-            return View(listaProcessos);
+            ViewBag.ESTADOSFILTRADOS = new SelectList(listaProcessos);
+            return View();
         }
 
         // metodo que devolve processos com coima
@@ -119,8 +107,40 @@ namespace PKX.Controllers
         }
 
         // GET: GJoaoLinhaProcessos
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoria, int? estado, int? prioridade, int? processo)
         {
+            var categorias = await _context.Categorias.ToListAsync();
+            var estados = await _context.Estados.ToListAsync();
+            var prioridades = await _context.Prioridades.ToListAsync();
+            var processos = await _context.Processos.ToListAsync();
+
+            if (categorias == null || estados == null || prioridades == null || processos == null) {
+                return NotFound();
+            }
+
+            ViewBag.CATEGORIAS = new SelectList(categorias, "Id", "Descricao");
+            ViewBag.ESTADOS = new SelectList(estados, "Id", "Designacao");
+            ViewBag.PRIORIDADES = new SelectList(prioridades, "Id", "Designacao");
+            ViewBag.PROCESSOS = new SelectList(processos, "Id", "Titulo");
+
+            var linhasProcessos = _context.LinhasProcessos.Include(p => p.Processos).AsQueryable();
+
+            if (categoria.HasValue) { 
+                linhasProcessos = (IQueryable<LinhaProcesso>)_context.Processos.Where(p => p.CategoriaId == categoria);
+            }
+
+            if (estado.HasValue) { 
+                linhasProcessos = (IQueryable<LinhaProcesso>)_context.Processos.Where(p => p.EstadoId == estado);
+            }
+
+            if (prioridade.HasValue) { 
+                linhasProcessos = (IQueryable<LinhaProcesso>)_context.Processos.Where(p => p.TipoPrioridadeId == prioridade);
+            }
+
+            if (processo.HasValue) { 
+                linhasProcessos = linhasProcessos.Where(p => p.ProcessoId == prioridade);
+            }
+
             return View(await _context.LinhasProcessos.ToListAsync());
         }
 
